@@ -1,0 +1,28 @@
+[
+  {
+    "id": "ORD-D5572A01",
+    "userId": "USR-535C9006",
+    "restaurantId": "RST-49941537",
+    "items": [
+      {
+        "menuItem": {
+          "id": "ITM-BB5442F2",
+          "restaurantId": "RST-49941537",
+          "name": "Cake",
+          "description": "Red Velvet",
+          "price": 120.0,
+          "category": "Pastry",
+          "isAvailable": true,
+          "quantity": 100,
+          "addOns": []
+        },
+        "quantity": 3,
+        "selectedAddOns": []
+      }
+    ],
+    "totalPrice": 360.0,
+    "status": "PLACED",
+    "placedAt": "2026-03-25T17:22:06.850562200",
+    "deliveryAddressId": "DEFAULT"
+  }
+]

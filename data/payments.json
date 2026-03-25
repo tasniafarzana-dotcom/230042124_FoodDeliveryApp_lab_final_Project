@@ -1,0 +1,11 @@
+[
+  {
+    "id": "PAY-168002FF",
+    "orderId": "ORD-D5572A01",
+    "method": "CASH",
+    "amount": 360.0,
+    "status": "COMPLETED",
+    "transactionId": "TXN-PAY-EC9103EB",
+    "paidAt": "2026-03-25T17:22:06.861312"
+  }
+]
