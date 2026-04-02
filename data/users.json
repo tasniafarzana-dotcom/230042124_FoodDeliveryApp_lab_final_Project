@@ -1,19 +1,19 @@
 [
   {
-    "id": "USR-535C9006",
-    "name": "tasnia",
-    "email": "tasniafarzana@iut-dhaka.edu",
+    "id": "USR-7B5AC619",
+    "name": "Tasnia Farzana",
+    "email": "tasniafarzana34@gmail.com",
     "phone": "01310428811",
-    "passwordHash": "hpmaishanuz@",
+    "passwordHash": "helloabc",
     "role": "CUSTOMER",
     "addressIds": []
   },
   {
-    "id": "USR-A1C49473",
+    "id": "USR-26946907",
     "name": "Nuzhat",
-    "email": "tasniafarzana34@gmail.com",
+    "email": "tasniafarzana@iut-dhaka.edu",
     "phone": "01719527736",
-    "passwordHash": "helloabc",
+    "passwordHash": "1234",
     "role": "RESTAURANT_OWNER",
     "addressIds": []
   }

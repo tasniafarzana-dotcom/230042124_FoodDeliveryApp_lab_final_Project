@@ -22,10 +22,10 @@ public class RestaurantService implements IRestaurantService {
 
     @Override
     public Restaurant registerRestaurant(String ownerId, String name, String cuisineType, String phone, Address address) {
-        if (!ValidationUtils.isNotEmpty(name)) {
+        if (ValidationUtils.isNotEmpty(name)) {
             throw new IllegalArgumentException("Restaurant name cannot be empty");
         }
-        if (!ValidationUtils.isValidPhone(phone)) {
+        if (ValidationUtils.isValidPhone(phone)) {
             throw new IllegalArgumentException("Invalid phone number");
         }
         String id = IdGenerator.generateRestaurantId();
@@ -50,7 +50,7 @@ public class RestaurantService implements IRestaurantService {
 
     @Override
     public List<Restaurant> findByArea(String area) {
-        if (!ValidationUtils.isNotEmpty(area)) {
+        if (ValidationUtils.isNotEmpty(area)) {
             throw new IllegalArgumentException("Area cannot be empty");
         }
         return restaurantRepository.findByArea(area);

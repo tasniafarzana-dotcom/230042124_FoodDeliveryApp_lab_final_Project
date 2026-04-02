@@ -1,10 +1,11 @@
 package org.fooddelivery.repository;
 
-import com.google.gson.reflect.TypeToken;
-import org.fooddelivery.model.Payment;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.fooddelivery.model.Payment;
+
+import com.google.gson.reflect.TypeToken;
 
 public class PaymentRepository extends FileRepository<Payment> implements IPaymentRepository {
 

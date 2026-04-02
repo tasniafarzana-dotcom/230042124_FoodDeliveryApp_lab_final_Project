@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Delivery System</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+    h2 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+    .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 20px; font-size: 14px; }
+    .container { max-width: 800px; margin: auto; }
+    .box { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+    .box h3 { margin-top: 0; color: #34495e; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+    input, select { width: calc(100% - 22px); padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: monospace; font-size: 14px; }
+    button { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; margin-top: 10px; font-weight: bold; transition: background 0.2s; }
+    button:hover { background: #2980b9; }
+    button:active { transform: scale(0.98); }
+    .btn-action { background: #27ae60; padding: 6px 12px; font-size: 12px; margin-top: 8px; }
+    .btn-action:hover { background: #219653; }
+    .btn-select { background: #e67e22; padding: 6px 12px; font-size: 12px; margin-top: 8px; }
+    .btn-select:hover { background: #d35400; }
+    .msg { font-weight: bold; margin-top: 10px; padding: 10px; border-radius: 4px; display: none; }
+    .error { color: #e74c3c; background: #fdedec; display: block; border-left: 4px solid #e74c3c; }
+    .success { color: #27ae60; background: #e8f8f5; display: block; border-left: 4px solid #27ae60; }
+    .info { color: #2980b9; background: #eaf2f8; display: block; border-left: 4px solid #3498db; }
+    .hidden { display: none !important; }
+    ul { list-style-type: none; padding: 0; }
+    li { background: #ecf0f1; margin: 8px 0; padding: 15px; border-radius: 4px; border-left: 4px solid #3498db; word-wrap: break-word; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; background: #2c3e50; color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .header-bar span { font-size: 16px; }
+    .badge { background: #e67e22; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px; font-family: monospace; }
+    .diagnostic { background: #333; color: #0f0; font-family: monospace; padding: 10px; border-radius: 4px; font-size: 12px; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Food Delivery System</h2>
+    <div class="subtitle">Smart SOAP Client</div>
+
+    <!-- User Header (Hidden until login) -->
+    <div id="userHeader" class="header-bar hidden">
+      <div>
+        <span id="welcomeText">Welcome!</span>
+        <span id="userIdBadge" class="badge"></span>
+      </div>
+      <button onclick="logout()" style="background: #e74c3c; margin: 0;">Logout</button>
+    </div>
+
+    <!-- AUTH SECTION -->
+    <div id="authSection" class="box">
+      <h3>Login / Register</h3>
+      <input id="authName" placeholder="Full Name (for register only)" />
+      <input id="authEmail" placeholder="Email Address *" type="email" />
+      <input id="authPhone" placeholder="Phone Number (for register only)" />
+      <input id="authPass" placeholder="Password *" type="password" />
+      <select id="authRole">
+        <option value="CUSTOMER">Customer</option>
+        <option value="RESTAURANT_OWNER">Restaurant Owner</option>
+      </select>
+      <button onclick="register()">Register</button>
+      <button onclick="login()" style="background: #2ecc71;">Login</button>
+      <div id="authMsg" class="msg"></div>
+    </div>
+
+    <!-- CUSTOMER SECTION -->
+    <div id="customerSection" class="hidden">
+      <div class="box">
+        <h3>1. Find Restaurants</h3>
+        <input id="area" placeholder="Enter Area (e.g. Uttara)" />
+        <button onclick="getRestaurants()">Search Restaurants</button>
+        <div id="restMsg" class="msg"></div>
+        <ul id="restaurantsList"></ul>
+      </div>
+
+      <div class="box">
+        <h3>2. View Menu</h3>
+        <input id="restaurantId" placeholder="Restaurant ID (Auto-filled)" />
+        <button onclick="getMenu()">Get Menu</button>
+        <div id="menuMsg" class="msg"></div>
+        <ul id="menuList"></ul>
+      </div>
+
+      <div class="box">
+        <h3>3. Place Order</h3>
+        <input id="menuItemId" placeholder="Menu Item ID (Auto-filled)" />
+        <input id="qty" placeholder="Quantity" type="number" min="1" value="1" />
+        <input id="coupon" placeholder="Coupon Code (Optional)" />
+        <button onclick="placeOrder()">Place Order</button>
+        <div id="orderResult" class="msg"></div>
+      </div>
+
+      <div class="box">
+        <h3>4. Pay & Track</h3>
+        <input id="orderIdActions" placeholder="Order ID (Auto-filled)" />
+        <select id="payMethod">
+          <option value="CASH">CASH</option>
+          <option value="CARD">CARD</option>
+          <option value="MOBILE_BANKING">MOBILE_BANKING</option>
+        </select>
+        <button onclick="payOrder()">Pay Now</button>
+        <button onclick="trackOrder()" style="background: #f39c12;">Track Order</button>
+        <div id="actionResult" class="msg"></div>
+      </div>
+    </div>
+
+    <!-- OWNER SECTION -->
+    <div id="ownerSection" class="hidden">
+      <div class="box">
+        <h3>Manage Active Orders</h3>
+        <input id="ownerRestaurantId" placeholder="Your Restaurant ID" />
+        <button onclick="getOwnerOrders()">Load Orders</button>
+        <div id="ownerLoadMsg" class="msg"></div>
+        <ul id="ownerOrdersList"></ul>
+      </div>
+
+      <div class="box">
+        <h3>Update Order</h3>
+        <input id="ownerOrderId" placeholder="Order ID (Auto-filled)" />
+        <select id="ownerStatus">
+          <option value="CONFIRMED">CONFIRMED</option>
+          <option value="PREPARING">PREPARING</option>
+          <option value="OUT_FOR_DELIVERY">OUT_FOR_DELIVERY</option>
+          <option value="DELIVERED">DELIVERED</option>
+          <option value="CANCELLED">CANCELLED</option>
+        </select>
+        <button onclick="updateStatus()">Update Status</button>
+        <button onclick="assignRider()" style="background: #f39c12;">Assign Rider</button>
+        <div id="ownerMsg" class="msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BASE = "http://localhost:8080";
+    const NS = "http://api.fooddelivery.org/";
+
+    let currentUser = null;
+
+    // --- Core SOAP Engine ---
+    async function sendSoap(url, body) {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "text/xml; charset=utf-8", "SOAPAction": '""' },
+          body: body
+        });
+        const text = await res.text();
+        const doc = new DOMParser().parseFromString(text, "text/xml");
+        const faultNodes = getList(doc, "faultstring");
+        if (faultNodes.length > 0) throw new Error(faultNodes[0].textContent);
+        return doc;
+      } catch (err) {
+        throw err; 
+      }
+    }
+
+    function getList(doc, tagName) {
+      const lowerTag = tagName.toLowerCase();
+      const all = doc.getElementsByTagName("*");
+      const res = [];
+      for(let i = 0; i < all.length; i++) {
+        const local = (all[i].localName || "").toLowerCase();
+        const full = (all[i].tagName || "").toLowerCase();
+        if (local === lowerTag || full === lowerTag || full.includes(":" + lowerTag)) {
+          res.push(all[i]);
+        }
+      }
+      return res;
+    }
+
+    // Flattens all tags inside a node into an easy object map
+    function extractData(node) {
+      const data = {};
+      if (!node) return data;
+      const elements = node.getElementsByTagName("*");
+      for (let i = 0; i < elements.length; i++) {
+        const el = elements[i];
+        if (el.children.length === 0 && el.textContent) { // It's a field
+          let tag = el.localName || el.tagName;
+          if (tag.includes(':')) tag = tag.split(':')[1];
+          data[tag.toLowerCase()] = el.textContent.trim();
+        }
+      }
+      return data;
+    }
+
+    // UI Helpers
+    function showMsg(elementId, text, type = "success") {
+      const el = document.getElementById(elementId);
+      el.textContent = text;
+      el.className = `msg ${type}`;
+    }
+
+    function hideMsg(elementId) { document.getElementById(elementId).className = "msg"; }
+
+    function setUIForUser() {
+      ["authMsg", "restMsg", "menuMsg", "orderResult", "actionResult", "ownerLoadMsg", "ownerMsg"].forEach(hideMsg);
+
+      if (!currentUser) {
+        document.getElementById("authSection").classList.remove("hidden");
+        document.getElementById("userHeader").classList.add("hidden");
+        document.getElementById("customerSection").classList.add("hidden");
+        document.getElementById("ownerSection").classList.add("hidden");
+        return;
+      }
+
+      document.getElementById("authSection").classList.add("hidden");
+      document.getElementById("userHeader").classList.remove("hidden");
+      document.getElementById("welcomeText").innerText = `Hello, ${currentUser.name}`;
+      document.getElementById("userIdBadge").innerText = `${currentUser.role} | ${currentUser.id}`;
+
+      if (currentUser.role === "CUSTOMER") {
+        document.getElementById("customerSection").classList.remove("hidden");
+        document.getElementById("ownerSection").classList.add("hidden");
+      } else {
+        document.getElementById("customerSection").classList.add("hidden");
+        document.getElementById("ownerSection").classList.remove("hidden");
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById("authPass").value = "";
+      setUIForUser();
+      showMsg("authMsg", "Logged out successfully.", "success");
+    }
+
+    // --- Logical Connectors ---
+    window.autoSelectRestaurant = function(id) {
+      document.getElementById("restaurantId").value = id;
+      document.getElementById("restaurantId").scrollIntoView({ behavior: "smooth", block: "center" });
+      getMenu(); // Auto trigger next step!
+    }
+    window.autoSelectItem = function(id) {
+      document.getElementById("menuItemId").value = id;
+      document.getElementById("qty").focus();
+      document.getElementById("qty").scrollIntoView({ behavior: "smooth", block: "center" });
+      showMsg("orderResult", "Item selected! Set quantity and click 'Place Order'.", "info");
+    }
+    window.autoSelectOrder = function(id) {
+      document.getElementById("ownerOrderId").value = id;
+      document.getElementById("ownerStatus").focus();
+      document.getElementById("ownerOrderId").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    // ================== AUTHENTICATION ==================
+
+    async function register() {
+      const name = document.getElementById("authName").value;
+      const email = document.getElementById("authEmail").value;
+      const pass = document.getElementById("authPass").value;
+      const phone = document.getElementById("authPhone").value;
+      const role = document.getElementById("authRole").value;
+      
+      if (!email || !pass || !name) return showMsg("authMsg", "❌ Name, Email, and Password are required!", "error");
+      showMsg("authMsg", "⏳ Registering...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:register><name>${name}</name><email>${email}</email><phone>${phone}</phone><password>${pass}</password><role>${role}</role></ws:register></soapenv:Body></soapenv:Envelope>`;
+      try {
+        await sendSoap(BASE + "/auth", body);
+        showMsg("authMsg", "✅ Registration successful! Please click Login.", "success");
+      } catch (err) { showMsg("authMsg", "❌ " + err.message, "error"); }
+    }
+
+    async function login() {
+      const email = document.getElementById("authEmail").value;
+      const pass = document.getElementById("authPass").value;
+      if (!email || !pass) return showMsg("authMsg", "❌ Email and Password required!", "error");
+      showMsg("authMsg", "⏳ Logging in...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:login><email>${email}</email><password>${pass}</password></ws:login></soapenv:Body></soapenv:Envelope>`;
+      try {
+        const doc = await sendSoap(BASE + "/auth", body);
+        const returns = getList(doc, "return");
+        const node = returns.length > 0 ? returns[0] : doc.documentElement;
+        const data = extractData(node);
+
+        currentUser = {
+          id: data.id || email, 
+          name: data.name || email.split("@")[0],
+          email: email,
+          role: (data.role || document.getElementById("authRole").value || "CUSTOMER").toUpperCase()
+        };
+        setUIForUser();
+      } catch (err) { showMsg("authMsg", "❌ Login failed: " + err.message, "error"); }
+    }
+
+    // ================== CUSTOMER DASHBOARD ==================
+
+    async function getRestaurants() {
+      const area = document.getElementById("area").value || "";
+      showMsg("restMsg", "⏳ Searching...", "info");
+      
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:getRestaurantsByArea><area>${area}</area></ws:getRestaurantsByArea></soapenv:Body></soapenv:Envelope>`;
+      try {
+        const doc = await sendSoap(BASE + "/restaurants", body);
+        const list = getList(doc, "return");
+        const ul = document.getElementById("restaurantsList");
+        ul.innerHTML = "";
+        
+        if (list.length === 0) return showMsg("restMsg", "ℹ️ No restaurants found for that area.", "info");
+        
+        showMsg("restMsg", `✅ Found ${list.length} restaurant(s).`, "success");
+        for (let i = 0; i < list.length; i++) {
+          const data = extractData(list[i]);
+          
+          if (data.id && data.name) {
+            ul.innerHTML += `<li>
+              <strong>${data.name}</strong> <span style="color:#7f8c8d; font-size:12px;">(${data.id})</span><br>
+              <button class="btn-action" onclick="autoSelectRestaurant('${data.id}')">Select & View Menu</button>
+            </li>`;
+          } else {
+            // DIAGNOSTIC FALLBACK: Shows exactly what fields Java sent so you can fix your backend!
+            const fields = Object.keys(data).map(k => `${k}: ${data[k]}`).join(', ');
+            ul.innerHTML += `<li>
+              <span style="color:#e74c3c;">⚠️ Backend Error: Missing 'id' or 'name' fields!</span><br>
+              <span style="font-size:12px;">Did you generate getters/setters in Java?</span>
+              <div class="diagnostic">Received Data: { ${fields} }</div>
+            </li>`;
+          }
+        }
+      } catch (err) { showMsg("restMsg", "❌ " + err.message, "error"); }
+    }
+
+    async function getMenu() {
+      const restId = document.getElementById("restaurantId").value;
+      if (!restId) return showMsg("menuMsg", "❌ Enter a Restaurant ID first", "error");
+      showMsg("menuMsg", "⏳ Loading menu...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:getAvailableItems><restaurantId>${restId}</restaurantId></ws:getAvailableItems></soapenv:Body></soapenv:Envelope>`;
+      try {
+        const doc = await sendSoap(BASE + "/menu", body);
+        const list = getList(doc, "return");
+        const ul = document.getElementById("menuList");
+        ul.innerHTML = "";
+
+        if (list.length === 0) return showMsg("menuMsg", "ℹ️ No menu items found.", "info");
+
+        showMsg("menuMsg", `✅ Loaded ${list.length} menu item(s).`, "success");
+        for (let i = 0; i < list.length; i++) {
+          const data = extractData(list[i]);
+          if (data.id) {
+            ul.innerHTML += `<li>
+              <strong>${data.name || 'Unknown'}</strong> - ৳${data.price || '0'} <span style="color:#7f8c8d; font-size:12px;">(${data.id})</span><br>
+              <button class="btn-select" onclick="autoSelectItem('${data.id}')">Select Item</button>
+            </li>`;
+          } else {
+             ul.innerHTML += `<li><span style="color:#e74c3c;">⚠️ Missing ID!</span><div class="diagnostic">${Object.keys(data).map(k => `${k}:${data[k]}`).join(', ')}</div></li>`;
+          }
+        }
+      } catch (err) { showMsg("menuMsg", "❌ " + err.message, "error"); }
+    }
+
+    async function placeOrder() {
+      const itemId = document.getElementById("menuItemId").value;
+      const restId = document.getElementById("restaurantId").value;
+      const qty = document.getElementById("qty").value || 1;
+      
+      if (!itemId || !restId) return showMsg("orderResult", "❌ Please provide Restaurant ID and Menu Item ID", "error");
+      showMsg("orderResult", "⏳ Placing order...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:placeOrder><userId>${currentUser.id}</userId><restaurantId>${restId}</restaurantId><menuItemId>${itemId}</menuItemId><quantity>${qty}</quantity><couponCode>${document.getElementById("coupon").value}</couponCode><deliveryAddressId>DEFAULT</deliveryAddressId></ws:placeOrder></soapenv:Body></soapenv:Envelope>`;
+      try {
+        const doc = await sendSoap(BASE + "/customer/orders", body);
+        const returns = getList(doc, "return");
+        const data = extractData(returns.length > 0 ? returns[0] : doc.documentElement);
+        
+        if (data.id) {
+          showMsg("orderResult", `✅ Order Placed! ID: ${data.id}`, "success");
+          document.getElementById("orderIdActions").value = data.id; // Auto fill pay step
+        } else {
+          showMsg("orderResult", "⚠️ Order processed but no ID returned.", "info");
+        }
+      } catch(err) { showMsg("orderResult", "❌ " + err.message, "error"); }
+    }
+
+    async function payOrder() {
+      const orderId = document.getElementById("orderIdActions").value;
+      if (!orderId) return showMsg("actionResult", "❌ Enter Order ID", "error");
+      showMsg("actionResult", "⏳ Processing payment...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:payOrder><orderId>${orderId}</orderId><method>${document.getElementById("payMethod").value}</method><amount>0</amount></ws:payOrder></soapenv:Body></soapenv:Envelope>`;
+      try {
+        await sendSoap(BASE + "/payments", body);
+        showMsg("actionResult", "✅ Payment Processed Successfully!", "success");
+      } catch(err) { showMsg("actionResult", "❌ " + err.message, "error"); }
+    }
+
+    async function trackOrder() {
+      const orderId = document.getElementById("orderIdActions").value;
+      if (!orderId) return showMsg("actionResult", "❌ Enter Order ID", "error");
+      showMsg("actionResult", "⏳ Checking status...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:getOrderStatus><orderId>${orderId}</orderId></ws:getOrderStatus></soapenv:Body></soapenv:Envelope>`;
+      try {
+        const doc = await sendSoap(BASE + "/order/status", body);
+        const returns = getList(doc, "return");
+        const status = returns.length > 0 ? returns[0].textContent : doc.documentElement.textContent;
+        showMsg("actionResult", `📍 Current Status: ${status}`, "success");
+      } catch(err) { showMsg("actionResult", "❌ " + err.message, "error"); }
+    }
+
+    // ================== OWNER DASHBOARD ==================
+
+    async function getOwnerOrders() {
+      const restId = document.getElementById("ownerRestaurantId").value;
+      if (!restId) return showMsg("ownerLoadMsg", "❌ Enter your Restaurant ID", "error");
+      showMsg("ownerLoadMsg", "⏳ Loading active orders...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:getActiveOrdersByRestaurant><restaurantId>${restId}</restaurantId></ws:getActiveOrdersByRestaurant></soapenv:Body></soapenv:Envelope>`;
+      try {
+        const doc = await sendSoap(BASE + "/owner/orders", body);
+        const list = getList(doc, "return");
+        const ul = document.getElementById("ownerOrdersList");
+        ul.innerHTML = "";
+
+        if (list.length === 0) return showMsg("ownerLoadMsg", "ℹ️ No active orders found.", "info");
+
+        showMsg("ownerLoadMsg", `✅ Found ${list.length} active order(s).`, "success");
+        for (let i = 0; i < list.length; i++) {
+          const data = extractData(list[i]);
+          if (data.id) {
+            ul.innerHTML += `<li>
+              <strong>Order ID:</strong> ${data.id} <br> 
+              <strong>Status:</strong> <span style="color:#e67e22;">${data.status}</span> <br>
+              <button class="btn-select" onclick="autoSelectOrder('${data.id}')">Manage Order</button>
+            </li>`;
+          } else {
+             ul.innerHTML += `<li><span style="color:#e74c3c;">⚠️ Missing ID!</span><div class="diagnostic">${Object.keys(data).map(k => `${k}:${data[k]}`).join(', ')}</div></li>`;
+          }
+        }
+      } catch(err) { showMsg("ownerLoadMsg", "❌ " + err.message, "error"); }
+    }
+
+    async function updateStatus() {
+      const orderId = document.getElementById("ownerOrderId").value;
+      if (!orderId) return showMsg("ownerMsg", "❌ Enter Order ID", "error");
+      showMsg("ownerMsg", "⏳ Updating status...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:updateOrderStatus><orderId>${orderId}</orderId><status>${document.getElementById("ownerStatus").value}</status></ws:updateOrderStatus></soapenv:Body></soapenv:Envelope>`;
+      try {
+        await sendSoap(BASE + "/owner/orders", body);
+        showMsg("ownerMsg", "✅ Status updated successfully!", "success");
+        getOwnerOrders(); // Auto-refresh table
+      } catch(err) { showMsg("ownerMsg", "❌ " + err.message, "error"); }
+    }
+
+    async function assignRider() {
+      const orderId = document.getElementById("ownerOrderId").value;
+      if (!orderId) return showMsg("ownerMsg", "❌ Enter Order ID", "error");
+      showMsg("ownerMsg", "⏳ Assigning rider...", "info");
+
+      const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}"><soapenv:Body><ws:assignRider><orderId>${orderId}</orderId></ws:assignRider></soapenv:Body></soapenv:Envelope>`;
+      try {
+        await sendSoap(BASE + "/owner/orders", body);
+        showMsg("ownerMsg", "✅ Rider assigned successfully!", "success");
+      } catch(err) { showMsg("ownerMsg", "❌ " + err.message, "error"); }
+    }
+  </script>
+</body>
+</html>

@@ -18,13 +18,13 @@ public class AuthService implements IAuthService {
 
     @Override
     public User register(String name, String email, String phone, String password, String role) {
-        if (!ValidationUtils.isValidEmail(email)) {
+        if (ValidationUtils.isValidEmail(email)) {
             throw new IllegalArgumentException("Invalid email format");
         }
-        if (!ValidationUtils.isValidPhone(phone)) {
+        if (ValidationUtils.isValidPhone(phone)) {
             throw new IllegalArgumentException("Invalid phone number");
         }
-        if (!ValidationUtils.isNotEmpty(name)) {
+        if (ValidationUtils.isNotEmpty(name)) {
             throw new IllegalArgumentException("Name cannot be empty");
         }
         if (userRepository.findByEmail(email).isPresent()) {
@@ -39,7 +39,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public Optional<User> login(String email, String password) {
-        if (!ValidationUtils.isValidEmail(email)) {
+        if (ValidationUtils.isValidEmail(email)) {
             throw new IllegalArgumentException("Invalid email format");
         }
         return userRepository.findByEmail(email)

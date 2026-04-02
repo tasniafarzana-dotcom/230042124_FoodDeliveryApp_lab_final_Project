@@ -1,13 +1,13 @@
 package org.fooddelivery.service;
 
+import java.util.List;
+
 import org.fooddelivery.model.AddOn;
 import org.fooddelivery.model.MenuItem;
 import org.fooddelivery.repository.IMenuRepository;
 import org.fooddelivery.repository.MenuRepository;
 import org.fooddelivery.util.IdGenerator;
 import org.fooddelivery.util.ValidationUtils;
-
-import java.util.List;
 
 public class MenuService implements IMenuService {
 
@@ -19,7 +19,7 @@ public class MenuService implements IMenuService {
 
     @Override
     public MenuItem addMenuItem(String restaurantId, String name, String description, double price, String category) {
-        if (!ValidationUtils.isNotEmpty(name)) {
+        if (ValidationUtils.isNotEmpty(name)) {
             throw new IllegalArgumentException("Item name cannot be empty");
         }
         if (!ValidationUtils.isPositive(price)) {

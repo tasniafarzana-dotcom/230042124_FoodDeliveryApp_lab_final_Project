@@ -2,7 +2,10 @@ package org.fooddelivery.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MenuItem {
     private String id;
     private String restaurantId;

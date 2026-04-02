@@ -1,7 +1,10 @@
 package org.fooddelivery.model;
 
 import java.util.List;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Order {
     private String id;
     private String userId;
