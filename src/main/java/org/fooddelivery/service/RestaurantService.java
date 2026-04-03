@@ -1,16 +1,15 @@
 package org.fooddelivery.service;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.fooddelivery.model.Address;
 import org.fooddelivery.model.Restaurant;
-import org.fooddelivery.model.Schedule;
 import org.fooddelivery.repository.IRestaurantRepository;
 import org.fooddelivery.repository.RestaurantRepository;
 import org.fooddelivery.util.GeoUtils;
 import org.fooddelivery.util.IdGenerator;
 import org.fooddelivery.util.ValidationUtils;
-
-import java.util.Comparator;
-import java.util.List;
 
 public class RestaurantService implements IRestaurantService {
 
@@ -21,13 +20,13 @@ public class RestaurantService implements IRestaurantService {
     }
 
     @Override
-    public Restaurant registerRestaurant(String ownerId, String name, String cuisineType, String phone, Address address) {
-        if (ValidationUtils.isNotEmpty(name)) {
+    public Restaurant registerRestaurant(String ownerId, String name, String cuisineType,
+                                         String phone, Address address) {
+        if (!ValidationUtils.isNotEmpty(name))
             throw new IllegalArgumentException("Restaurant name cannot be empty");
-        }
-        if (ValidationUtils.isValidPhone(phone)) {
+        if (!ValidationUtils.isValidPhone(phone))
             throw new IllegalArgumentException("Invalid phone number");
-        }
+
         String id = IdGenerator.generateRestaurantId();
         Restaurant restaurant = new Restaurant(id, ownerId, name, cuisineType, phone, address);
         restaurantRepository.save(restaurant);
@@ -50,9 +49,8 @@ public class RestaurantService implements IRestaurantService {
 
     @Override
     public List<Restaurant> findByArea(String area) {
-        if (ValidationUtils.isNotEmpty(area)) {
+        if (!ValidationUtils.isNotEmpty(area))
             throw new IllegalArgumentException("Area cannot be empty");
-        }
         return restaurantRepository.findByArea(area);
     }
 
@@ -65,14 +63,6 @@ public class RestaurantService implements IRestaurantService {
     public void setOpenStatus(String restaurantId, boolean isOpen) {
         restaurantRepository.findById(restaurantId).ifPresent(r -> {
             r.setOpen(isOpen);
-            restaurantRepository.update(r);
-        });
-    }
-
-    @Override
-    public void addSchedule(String restaurantId, Schedule schedule) {
-        restaurantRepository.findById(restaurantId).ifPresent(r -> {
-            r.addSchedule(schedule);
             restaurantRepository.update(r);
         });
     }

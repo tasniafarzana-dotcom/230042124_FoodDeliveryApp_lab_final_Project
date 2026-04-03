@@ -2,6 +2,7 @@ package org.fooddelivery.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 
@@ -15,7 +16,10 @@ public class User {
     private String role;
     private List<String> addressIds;
 
-    public User(String id, String name, String email, String phone, String passwordHash, String role) {
+    public User() {}
+
+    public User(String id, String name, String email, String phone,
+                String passwordHash, String role) {
         this.id = id;
         this.name = name;
         this.email = email;

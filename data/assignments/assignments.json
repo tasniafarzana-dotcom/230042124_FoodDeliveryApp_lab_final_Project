@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ASN-ADEE1B97",
+    "orderId": "ORD-97D30C31",
+    "riderId": "USR-8221D6B8",
+    "status": "PENDING",
+    "assignedAt": "2026-04-03T10:04:14.500979200"
+  },
+  {
+    "id": "ASN-389A4C1A",
+    "orderId": "ORD-97D30C31",
+    "riderId": "USR-8221D6B8",
+    "status": "PENDING",
+    "assignedAt": "2026-04-03T09:54:16.220534700"
+  }
+]

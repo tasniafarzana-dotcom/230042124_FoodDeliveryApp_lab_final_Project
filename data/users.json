@@ -1,20 +1,29 @@
 [
   {
-    "id": "USR-7B5AC619",
+    "id": "USR-439EB20B",
     "name": "Tasnia Farzana",
     "email": "tasniafarzana34@gmail.com",
     "phone": "01310428811",
-    "passwordHash": "helloabc",
+    "passwordHash": "hpmaishanuz@",
     "role": "CUSTOMER",
     "addressIds": []
   },
   {
-    "id": "USR-26946907",
-    "name": "Nuzhat",
+    "id": "USR-94089C48",
+    "name": "Nuzhat Rahman",
     "email": "tasniafarzana@iut-dhaka.edu",
     "phone": "01719527736",
     "passwordHash": "1234",
     "role": "RESTAURANT_OWNER",
+    "addressIds": []
+  },
+  {
+    "id": "USR-8221D6B8",
+    "name": "Akash Rahman",
+    "email": "akash123@gmail.com",
+    "phone": "01712051799",
+    "passwordHash": "akash123",
+    "role": "DELIVERY_RIDER",
     "addressIds": []
   }
 ]

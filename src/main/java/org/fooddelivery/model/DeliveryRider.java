@@ -8,6 +8,8 @@ public class DeliveryRider {
     private double currentLat;
     private double currentLng;
 
+    public DeliveryRider() {}
+
     public DeliveryRider(String id, String name, String phone) {
         this.id = id;
         this.name = name;

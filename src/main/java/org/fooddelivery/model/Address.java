@@ -9,6 +9,8 @@ public class Address {
     private double lat;
     private double lng;
 
+    public Address() {}
+
     public Address(String id, String label, String street, String area, String city, double lat, double lng) {
         this.id = id;
         this.label = label;

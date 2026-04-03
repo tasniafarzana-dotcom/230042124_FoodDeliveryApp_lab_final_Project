@@ -1,0 +1,12 @@
+[
+  {
+    "id": "ITM-AE6987D5",
+    "restaurantId": "RST-825F8188",
+    "name": "pastry cake",
+    "description": "Red velvet",
+    "price": 120.0,
+    "category": "Dessert",
+    "isAvailable": true,
+    "quantity": 98
+  }
+]

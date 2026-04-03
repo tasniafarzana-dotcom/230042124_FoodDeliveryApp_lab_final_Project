@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ORD-97D30C31",
+    "userId": "USR-439EB20B",
+    "restaurantId": "RST-825F8188",
+    "items": [
+      {
+        "menuItem": {
+          "id": "ITM-AE6987D5",
+          "restaurantId": "RST-825F8188",
+          "name": "pastry cake",
+          "description": "Red velvet",
+          "price": 120.0,
+          "category": "Dessert",
+          "isAvailable": true,
+          "quantity": 100
+        },
+        "quantity": 2
+      }
+    ],
+    "totalPrice": 240.0,
+    "status": "CONFIRMED",
+    "placedAt": "2026-04-03T09:51:25.958991700",
+    "deliveryAddressId": "DEFAULT"
+  }
+]

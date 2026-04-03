@@ -32,7 +32,8 @@ public class IdGenerator {
         return "ADR-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    public static String generateCouponId() {
-        return "CPN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+    public static String generateId() {
+        return "ASN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 }

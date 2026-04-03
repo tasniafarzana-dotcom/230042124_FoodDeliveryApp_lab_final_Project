@@ -1,12 +1,11 @@
 package org.fooddelivery.repository;
 
-import com.google.gson.reflect.TypeToken;
-import org.fooddelivery.util.SerializationUtils;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.fooddelivery.util.SerializationUtils;
 
 public abstract class FileRepository<T> implements IRepository<T> {
 

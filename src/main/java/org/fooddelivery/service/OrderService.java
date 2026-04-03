@@ -1,35 +1,52 @@
 package org.fooddelivery.service;
 
-import org.fooddelivery.model.Cart;
+import java.util.List;
+
+import org.fooddelivery.model.MenuItem;
 import org.fooddelivery.model.Order;
+import org.fooddelivery.model.OrderItem;
 import org.fooddelivery.model.OrderStatus;
+import org.fooddelivery.repository.IMenuRepository;
 import org.fooddelivery.repository.IOrderRepository;
+import org.fooddelivery.repository.MenuRepository;
 import org.fooddelivery.repository.OrderRepository;
 import org.fooddelivery.util.IdGenerator;
-
-import java.util.List;
 
 public class OrderService implements IOrderService {
 
     private final IOrderRepository orderRepository;
-    private final ICartService cartService;
+    private final IMenuRepository menuRepository;
 
     public OrderService() {
         this.orderRepository = new OrderRepository();
-        this.cartService = new CartService();
+        this.menuRepository = new MenuRepository();
     }
 
     @Override
-    public Order placeOrder(Cart cart, String deliveryAddressId) {
-        if (cart.getItems().isEmpty()) {
-            throw new IllegalArgumentException("Cart is empty");
-        }
-        double total = cartService.calculateTotal(cart);
+    public Order placeOrder(String userId, String restaurantId, String menuItemId,
+                            int quantity, String deliveryAddressId) {
+
+        MenuItem item = menuRepository.findById(menuItemId)
+                .orElseThrow(() -> new IllegalArgumentException("Menu item not found: " + menuItemId));
+
+        if (!item.isAvailable())
+            throw new IllegalArgumentException("Item is not available");
+        if (item.getQuantity() < quantity)
+            throw new IllegalArgumentException("Not enough stock");
+        if (quantity <= 0)
+            throw new IllegalArgumentException("Quantity must be positive");
+
+        OrderItem orderItem = new OrderItem(item, quantity);
+        double total = orderItem.getTotalPrice();
+
         String id = IdGenerator.generateOrderId();
-        Order order = new Order(id, cart.getUserId(), cart.getRestaurantId(),
-                cart.getItems(), total, deliveryAddressId);
+        Order order = new Order(id, userId, restaurantId, List.of(orderItem), total, deliveryAddressId);
         orderRepository.save(order);
-        cartService.clearCart(cart);
+
+        // Stock কমানো
+        item.setQuantity(item.getQuantity() - quantity);
+        menuRepository.update(item);
+
         return order;
     }
 
@@ -39,6 +56,16 @@ public class OrderService implements IOrderService {
             order.setStatus(status);
             orderRepository.update(order);
         });
+    }
+
+    @Override
+    public void updateOrder(Order order) {
+        orderRepository.update(order);
+    }
+
+    @Override
+    public Order getOrderById(String orderId) {
+        return orderRepository.findById(orderId).orElse(null);
     }
 
     @Override
@@ -54,9 +81,8 @@ public class OrderService implements IOrderService {
     @Override
     public void cancelOrder(String orderId) {
         orderRepository.findById(orderId).ifPresent(order -> {
-            if (order.getStatus() == OrderStatus.DELIVERED) {
+            if (order.getStatus() == OrderStatus.DELIVERED)
                 throw new IllegalArgumentException("Cannot cancel a delivered order");
-            }
             order.setStatus(OrderStatus.CANCELLED);
             orderRepository.update(order);
         });

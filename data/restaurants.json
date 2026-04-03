@@ -1,0 +1,21 @@
+[
+  {
+    "id": "RST-825F8188",
+    "ownerId": "USR-94089C48",
+    "name": "Nuzhat Bakery Shop",
+    "cuisineType": "Thai",
+    "phone": "01719527736",
+    "address": {
+      "id": "ADR-780D66EB",
+      "label": "Main",
+      "street": "Sec 10",
+      "area": "Uttara",
+      "city": "Dhaka",
+      "lat": 23.8103,
+      "lng": 90.4125
+    },
+    "isOpen": false,
+    "rating": 0.0,
+    "totalRatings": 0
+  }
+]

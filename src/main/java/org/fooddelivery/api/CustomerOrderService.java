@@ -1,29 +1,21 @@
 package org.fooddelivery.api;
 
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
-import jakarta.jws.WebService;
-import org.fooddelivery.model.Cart;
-import org.fooddelivery.model.MenuItem;
+import java.util.List;
+
 import org.fooddelivery.model.Order;
-import org.fooddelivery.repository.IMenuRepository;
-import org.fooddelivery.repository.MenuRepository;
-import org.fooddelivery.service.CartService;
-import org.fooddelivery.service.ICartService;
 import org.fooddelivery.service.IOrderService;
 import org.fooddelivery.service.OrderService;
 
-import java.util.List;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebService;
 
 @WebService(targetNamespace = "http://api.fooddelivery.org/")
 public class CustomerOrderService {
-    private final IMenuRepository menuRepository;
-    private final ICartService cartService;
+
     private final IOrderService orderService;
 
     public CustomerOrderService() {
-        this.menuRepository = new MenuRepository();
-        this.cartService = new CartService();
         this.orderService = new OrderService();
     }
 
@@ -34,23 +26,12 @@ public class CustomerOrderService {
             @WebParam(name = "menuItemId") String menuItemId,
             @WebParam(name = "quantity") int quantity,
             @WebParam(name = "couponCode") String couponCode,
-            @WebParam(name = "deliveryAddressId") String deliveryAddressId
-    ) {
-        MenuItem item = menuRepository.findById(menuItemId)
-                .orElseThrow(() -> new IllegalArgumentException("Menu item not found: " + menuItemId));
-
-        Cart cart = new Cart(userId, restaurantId);
-        cartService.addItem(cart, item, quantity, null);
-
-        if (couponCode != null && !couponCode.isBlank()) {
-            cartService.applyCoupon(cart, couponCode);
-        }
+            @WebParam(name = "deliveryAddressId") String deliveryAddressId) {
 
         String addressId = (deliveryAddressId == null || deliveryAddressId.isBlank())
-                ? "DEFAULT"
-                : deliveryAddressId;
+                ? "DEFAULT" : deliveryAddressId;
 
-        return orderService.placeOrder(cart, addressId);
+        return orderService.placeOrder(userId, restaurantId, menuItemId, quantity, addressId);
     }
 
     @WebMethod

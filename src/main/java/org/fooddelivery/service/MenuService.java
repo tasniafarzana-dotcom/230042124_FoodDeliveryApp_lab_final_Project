@@ -2,7 +2,6 @@ package org.fooddelivery.service;
 
 import java.util.List;
 
-import org.fooddelivery.model.AddOn;
 import org.fooddelivery.model.MenuItem;
 import org.fooddelivery.repository.IMenuRepository;
 import org.fooddelivery.repository.MenuRepository;
@@ -18,13 +17,13 @@ public class MenuService implements IMenuService {
     }
 
     @Override
-    public MenuItem addMenuItem(String restaurantId, String name, String description, double price, String category) {
-        if (ValidationUtils.isNotEmpty(name)) {
+    public MenuItem addMenuItem(String restaurantId, String name, String description,
+                                double price, String category) {
+        if (!ValidationUtils.isNotEmpty(name))
             throw new IllegalArgumentException("Item name cannot be empty");
-        }
-        if (!ValidationUtils.isPositive(price)) {
+        if (!ValidationUtils.isPositive(price))
             throw new IllegalArgumentException("Price must be positive");
-        }
+
         String id = IdGenerator.generateMenuItemId();
         MenuItem item = new MenuItem(id, restaurantId, name, description, price, category);
         menuRepository.save(item);
@@ -41,19 +40,10 @@ public class MenuService implements IMenuService {
 
     @Override
     public void updateQuantity(String itemId, int quantity) {
-        if (!ValidationUtils.isPositive(quantity)) {
+        if (!ValidationUtils.isPositive(quantity))
             throw new IllegalArgumentException("Quantity must be positive");
-        }
         menuRepository.findById(itemId).ifPresent(item -> {
             item.setQuantity(quantity);
-            menuRepository.update(item);
-        });
-    }
-
-    @Override
-    public void addAddOn(String itemId, AddOn addOn) {
-        menuRepository.findById(itemId).ifPresent(item -> {
-            item.addAddOn(addOn);
             menuRepository.update(item);
         });
     }

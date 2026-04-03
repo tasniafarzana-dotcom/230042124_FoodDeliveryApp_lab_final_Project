@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Delivery System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Food Delivery System</h2>
+    <div class="subtitle">Smart SOAP Client</div>
+
+    <!-- User Header -->
+    <div id="userHeader" class="header-bar hidden">
+      <div>
+        <span id="welcomeText">Welcome!</span>
+        <span id="userIdBadge" class="badge"></span>
+      </div>
+      <button onclick="logout()" style="background:#e74c3c;margin:0;">Logout</button>
+    </div>
+
+    <!-- Sections -->
+    <div id="authSection"></div>
+    <div id="customerSection" class="hidden"></div>
+    <div id="ownerSection" class="hidden"></div>
+    <div id="riderSection" class="hidden"></div>
+  </div>
+
+  <script src="common.js"></script>
+  <script src="auth.js"></script>
+  <script src="customer.js"></script>
+  <script src="order.js"></script>
+  <script src="owner-restaurant.js"></script>
+  <script src="owner-menu.js"></script>
+  <script src="owner-orders.js"></script>
+  <script src="rider.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

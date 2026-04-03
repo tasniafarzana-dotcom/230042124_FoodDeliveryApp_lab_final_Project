@@ -1,12 +1,12 @@
 package org.fooddelivery.api;
 
+import org.fooddelivery.model.Order;
+import org.fooddelivery.repository.IOrderRepository;
+import org.fooddelivery.repository.OrderRepository;
+
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
-import org.fooddelivery.model.Order;
-import org.fooddelivery.model.OrderStatus;
-import org.fooddelivery.repository.IOrderRepository;
-import org.fooddelivery.repository.OrderRepository;
 
 @WebService
 public class OrderStatusService {

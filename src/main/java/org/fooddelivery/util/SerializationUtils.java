@@ -1,12 +1,19 @@
 package org.fooddelivery.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class SerializationUtils {
 
@@ -36,5 +43,11 @@ public class SerializationUtils {
 
     public static String toJson(Object data) {
         return gson.toJson(data);
+    }
+
+    
+    public static <T> List<T> fromJsonList(String json, Class<T> clazz) {
+        Type type = TypeToken.getParameterized(List.class, clazz).getType();
+        return gson.fromJson(json, type);
     }
 }
