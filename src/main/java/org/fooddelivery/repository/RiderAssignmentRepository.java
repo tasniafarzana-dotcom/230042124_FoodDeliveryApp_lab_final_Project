@@ -1,10 +1,17 @@
 package org.fooddelivery.repository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.fooddelivery.model.RiderAssignment;
 import org.fooddelivery.util.SerializationUtils;
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
 
 public class RiderAssignmentRepository implements IRiderAssignmentRepository {
     
@@ -60,7 +67,6 @@ public class RiderAssignmentRepository implements IRiderAssignmentRepository {
         try {
             Files.createDirectories(Paths.get(DATA_DIR));
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -69,7 +75,6 @@ public class RiderAssignmentRepository implements IRiderAssignmentRepository {
             String json = SerializationUtils.toJson(new ArrayList<>(cache.values()));
             Files.write(Paths.get(DATA_DIR, "assignments.json"), json.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -84,7 +89,6 @@ public class RiderAssignmentRepository implements IRiderAssignmentRepository {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

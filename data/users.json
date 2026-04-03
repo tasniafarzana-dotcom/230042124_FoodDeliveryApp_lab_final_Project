@@ -25,5 +25,14 @@
     "passwordHash": "akash123",
     "role": "DELIVERY_RIDER",
     "addressIds": []
+  },
+  {
+    "id": "USR-025F71DB",
+    "name": "Abir Hasan",
+    "email": "abir56@gmail.com",
+    "phone": "01408482358",
+    "passwordHash": "abir56",
+    "role": "DELIVERY_RIDER",
+    "addressIds": []
   }
 ]

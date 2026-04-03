@@ -18,14 +18,21 @@ public class MenuService implements IMenuService {
 
     @Override
     public MenuItem addMenuItem(String restaurantId, String name, String description,
-                                double price, String category) {
+                                double price, String category, int quantity) {
+        if (!ValidationUtils.isNotEmpty(restaurantId))
+            throw new IllegalArgumentException("Restaurant ID cannot be empty");
         if (!ValidationUtils.isNotEmpty(name))
             throw new IllegalArgumentException("Item name cannot be empty");
         if (!ValidationUtils.isPositive(price))
             throw new IllegalArgumentException("Price must be positive");
+        if (quantity < 0)
+            throw new IllegalArgumentException("Quantity cannot be negative");
 
         String id = IdGenerator.generateMenuItemId();
         MenuItem item = new MenuItem(id, restaurantId, name, description, price, category);
+        item.setQuantity(quantity);
+        item.setAvailable(quantity > 0);
+
         menuRepository.save(item);
         return item;
     }
@@ -40,10 +47,12 @@ public class MenuService implements IMenuService {
 
     @Override
     public void updateQuantity(String itemId, int quantity) {
-        if (!ValidationUtils.isPositive(quantity))
-            throw new IllegalArgumentException("Quantity must be positive");
+        if (quantity < 0)
+            throw new IllegalArgumentException("Quantity cannot be negative");
+
         menuRepository.findById(itemId).ifPresent(item -> {
             item.setQuantity(quantity);
+            item.setAvailable(quantity > 0);
             menuRepository.update(item);
         });
     }

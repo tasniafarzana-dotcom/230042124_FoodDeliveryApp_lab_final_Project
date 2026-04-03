@@ -42,12 +42,52 @@ public class OwnerOrderService {
     }
 
     @WebMethod
+    public List<DeliveryRider> getAvailableRiders() {
+        return riderRepository.findAvailableRiders();
+    }
+
+    
+    @WebMethod
     public String assignRider(@WebParam(name = "orderId") String orderId) {
         List<DeliveryRider> available = riderRepository.findAvailableRiders();
-        if (available.isEmpty())
+
+        if (available.isEmpty()) {
             throw new IllegalArgumentException("No available riders at the moment");
+        }
+
         DeliveryRider rider = available.get(0);
+
         assignmentService.createAssignment(orderId, rider.getId());
-        return "Rider " + rider.getName() + " assigned! Waiting for acceptance.";
+        rider.setAvailable(false);
+        riderRepository.update(rider);
+
+        return "Rider " + rider.getName() + " (" + rider.getId() + ") assigned successfully!";
+    }
+
+    @WebMethod
+    public String assignRiderToOrder(
+            @WebParam(name = "orderId") String orderId,
+            @WebParam(name = "riderId") String riderId) {
+
+        if (orderId == null || orderId.isBlank()) {
+            throw new IllegalArgumentException("Order ID is required");
+        }
+
+        if (riderId == null || riderId.isBlank()) {
+            throw new IllegalArgumentException("Rider ID is required");
+        }
+
+        DeliveryRider rider = riderRepository.findById(riderId)
+                .orElseThrow(() -> new IllegalArgumentException("Rider not found: " + riderId));
+
+        if (!rider.isAvailable()) {
+            throw new IllegalArgumentException("Selected rider is not available");
+        }
+
+        assignmentService.createAssignment(orderId, rider.getId());
+        rider.setAvailable(false);
+        riderRepository.update(rider);
+
+        return "Rider " + rider.getName() + " (" + rider.getId() + ") assigned successfully!";
     }
 }

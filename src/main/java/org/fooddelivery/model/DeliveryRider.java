@@ -1,5 +1,9 @@
 package org.fooddelivery.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DeliveryRider {
     private String id;
     private String name;
@@ -26,6 +30,9 @@ public class DeliveryRider {
     public double getCurrentLat() { return currentLat; }
     public double getCurrentLng() { return currentLng; }
 
+    public void setId(String id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setPhone(String phone) { this.phone = phone; }
     public void setAvailable(boolean available) { isAvailable = available; }
     public void setCurrentLat(double currentLat) { this.currentLat = currentLat; }
     public void setCurrentLng(double currentLng) { this.currentLng = currentLng; }

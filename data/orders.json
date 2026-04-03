@@ -19,8 +19,128 @@
       }
     ],
     "totalPrice": 240.0,
-    "status": "CONFIRMED",
+    "status": "DELIVERED",
     "placedAt": "2026-04-03T09:51:25.958991700",
+    "deliveryAddressId": "DEFAULT"
+  },
+  {
+    "id": "ORD-1B43B194",
+    "userId": "USR-439EB20B",
+    "restaurantId": "RST-825F8188",
+    "items": [
+      {
+        "menuItem": {
+          "id": "ITM-AE6987D5",
+          "restaurantId": "RST-825F8188",
+          "name": "pastry cake",
+          "description": "Red velvet",
+          "price": 120.0,
+          "category": "Dessert",
+          "isAvailable": true,
+          "quantity": 98
+        },
+        "quantity": 2
+      }
+    ],
+    "totalPrice": 240.0,
+    "status": "CONFIRMED",
+    "placedAt": "2026-04-03T16:48:54.049608100",
+    "deliveryAddressId": "DEFAULT"
+  },
+  {
+    "id": "ORD-621368B4",
+    "userId": "USR-439EB20B",
+    "restaurantId": "RST-825F8188",
+    "items": [
+      {
+        "menuItem": {
+          "id": "ITM-AE6987D5",
+          "restaurantId": "RST-825F8188",
+          "name": "pastry cake",
+          "description": "Red velvet",
+          "price": 120.0,
+          "category": "Dessert",
+          "isAvailable": true,
+          "quantity": 96
+        },
+        "quantity": 1
+      }
+    ],
+    "totalPrice": 120.0,
+    "status": "DELIVERED",
+    "placedAt": "2026-04-03T23:14:26.252404600",
+    "deliveryAddressId": "DEFAULT"
+  },
+  {
+    "id": "ORD-9993741B",
+    "userId": "USR-439EB20B",
+    "restaurantId": "RST-825F8188",
+    "items": [
+      {
+        "menuItem": {
+          "id": "ITM-AE6987D5",
+          "restaurantId": "RST-825F8188",
+          "name": "pastry cake",
+          "description": "Red velvet",
+          "price": 120.0,
+          "category": "Dessert",
+          "isAvailable": true,
+          "quantity": 95
+        },
+        "quantity": 3
+      }
+    ],
+    "totalPrice": 360.0,
+    "status": "DELIVERED",
+    "placedAt": "2026-04-03T23:19:36.695534400",
+    "deliveryAddressId": "DEFAULT"
+  },
+  {
+    "id": "ORD-73D2E057",
+    "userId": "USR-439EB20B",
+    "restaurantId": "RST-825F8188",
+    "items": [
+      {
+        "menuItem": {
+          "id": "ITM-AE6987D5",
+          "restaurantId": "RST-825F8188",
+          "name": "pastry cake",
+          "description": "Red velvet",
+          "price": 120.0,
+          "category": "Dessert",
+          "isAvailable": true,
+          "quantity": 92
+        },
+        "quantity": 3
+      }
+    ],
+    "totalPrice": 360.0,
+    "status": "CONFIRMED",
+    "placedAt": "2026-04-04T00:20:29.349782200",
+    "deliveryAddressId": "DEFAULT"
+  },
+  {
+    "id": "ORD-4C506DBE",
+    "userId": "USR-439EB20B",
+    "restaurantId": "RST-825F8188",
+    "items": [
+      {
+        "menuItem": {
+          "id": "ITM-AE6987D5",
+          "restaurantId": "RST-825F8188",
+          "name": "pastry cake",
+          "description": "Red velvet",
+          "price": 120.0,
+          "category": "Dessert",
+          "isAvailable": true,
+          "quantity": 89
+        },
+        "quantity": 3
+      }
+    ],
+    "totalPrice": 360.0,
+    "status": "CONFIRMED",
+    "placedAt": "2026-04-04T00:32:51.654138900",
     "deliveryAddressId": "DEFAULT"
   }
 ]

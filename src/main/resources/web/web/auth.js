@@ -1,5 +1,5 @@
 // ============================================================
-// auth.js — Module 1: Login & Register
+// auth.js —  Login & Register
 // ============================================================
 
 function renderAuthSection() {
@@ -15,58 +15,86 @@ function renderAuthSection() {
         <option value="RESTAURANT_OWNER">Restaurant Owner</option>
         <option value="DELIVERY_RIDER">Delivery Rider</option>
       </select>
-      <button onclick="register()">Register</button>
-      <button onclick="login()" style="background:#2ecc71;">Login</button>
+      <button type="button" onclick="register(event)">Register</button>
+      <button type="button" onclick="login(event)" style="background:#2ecc71;">Login</button>
       <div id="authMsg" class="msg"></div>
     </div>
   `;
 }
 
-async function register() {
+async function register(event) {
+  if (event) event.preventDefault();
+
   const name  = document.getElementById("authName").value.trim();
   const email = document.getElementById("authEmail").value.trim();
   const pass  = document.getElementById("authPass").value;
   const phone = document.getElementById("authPhone").value.trim();
   const role  = document.getElementById("authRole").value;
 
-  if (!email || !pass || !name)
+  if (!name || !email || !pass) {
     return showMsg("authMsg", "❌ Name, Email, and Password are required!", "error");
+  }
+
   showMsg("authMsg", "⏳ Registering...", "info");
 
   const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}">
-    <soapenv:Body><ws:register>
-      <name>${name}</name><email>${email}</email>
-      <phone>${phone}</phone><password>${pass}</password><role>${role}</role>
-    </ws:register></soapenv:Body></soapenv:Envelope>`;
+    <soapenv:Body>
+      <ws:register>
+        <name>${name}</name>
+        <email>${email}</email>
+        <phone>${phone}</phone>
+        <password>${pass}</password>
+        <role>${role}</role>
+      </ws:register>
+    </soapenv:Body>
+  </soapenv:Envelope>`;
+
   try {
     await sendSoap(BASE + "/auth", body);
     showMsg("authMsg", "✅ Registration successful! Please click Login.", "success");
-  } catch (err) { showMsg("authMsg", "❌ " + err.message, "error"); }
+  } catch (err) {
+    showMsg("authMsg", "❌ " + err.message, "error");
+  }
 }
 
-async function login() {
+async function login(event) {
+  if (event) event.preventDefault();
+
   const email = document.getElementById("authEmail").value.trim();
   const pass  = document.getElementById("authPass").value;
-  if (!email || !pass)
+
+  if (!email || !pass) {
     return showMsg("authMsg", "❌ Email and Password required!", "error");
+  }
+
   showMsg("authMsg", "⏳ Logging in...", "info");
 
   const body = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="${NS}">
-    <soapenv:Body><ws:login>
-      <email>${email}</email><password>${pass}</password>
-    </ws:login></soapenv:Body></soapenv:Envelope>`;
+    <soapenv:Body>
+      <ws:login>
+        <email>${email}</email>
+        <password>${pass}</password>
+      </ws:login>
+    </soapenv:Body>
+  </soapenv:Envelope>`;
+
   try {
-    const doc  = await sendSoap(BASE + "/auth", body);
+    const doc = await sendSoap(BASE + "/auth", body);
     const returns = getList(doc, "return");
     const node = returns.length > 0 ? returns[0] : doc.documentElement;
     const data = extractData(node);
 
     currentUser = {
-      id:    data.id    || email,
-      name:  data.name  || email.split("@")[0],
+      id: data.id || email,
+      name: data.name || email.split("@")[0],
       email: email,
-      role: (data.role  || document.getElementById("authRole").value || "CUSTOMER").toUpperCase()
+      role: (data.role || document.getElementById("authRole").value || "CUSTOMER").toUpperCase()
     };
+
+    saveCurrentUser();
     setUIForUser();
-  } catch (err) { showMsg("authMsg", "❌ Login failed: " + err.message, "error"); }
+    showMsg("authMsg", "✅ Login successful!", "success");
+  } catch (err) {
+    showMsg("authMsg", "❌ Login failed: " + err.message, "error");
+  }
 }

@@ -62,7 +62,6 @@ public class RestaurantService implements IRestaurantService {
     @Override
     public void setOpenStatus(String restaurantId, boolean isOpen) {
         restaurantRepository.findById(restaurantId).ifPresent(r -> {
-            r.setOpen(isOpen);
             restaurantRepository.update(r);
         });
     }
@@ -70,10 +69,6 @@ public class RestaurantService implements IRestaurantService {
     @Override
     public void updateRating(String restaurantId, double newRating) {
         restaurantRepository.findById(restaurantId).ifPresent(r -> {
-            int total = r.getTotalRatings() + 1;
-            double updated = ((r.getRating() * r.getTotalRatings()) + newRating) / total;
-            r.setRating(updated);
-            r.setTotalRatings(total);
             restaurantRepository.update(r);
         });
     }

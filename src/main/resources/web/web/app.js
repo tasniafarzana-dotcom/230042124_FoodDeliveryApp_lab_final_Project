@@ -3,50 +3,115 @@
 // ============================================================
 
 function setUIForUser() {
-  const allMsgs = ["authMsg","restMsg","menuMsg","orderResult","actionResult",
-                   "ownerLoadMsg","ownerMsg","addRestMsg","addMenuMsg","myRestMsg",
-                   "pendingTaskMsg","activeDeliveryMsg"];
-  allMsgs.forEach(hideMsg);
+  const allMsgs = [
+    "authMsg",
+    "restMsg",
+    "menuMsg",
+    "orderResult",
+    "actionResult",
+    "ownerLoadMsg",
+    "ownerMsg",
+    "addRestMsg",
+    "addMenuMsg",
+    "myRestMsg",
+    "pendingTaskMsg",
+    "activeDeliveryMsg"
+  ];
+  clearMessages(allMsgs);
+
+  const authSection     = document.getElementById("authSection");
+  const userHeader      = document.getElementById("userHeader");
+  const customerSection = document.getElementById("customerSection");
+  const ownerSection    = document.getElementById("ownerSection");
+  const riderSection    = document.getElementById("riderSection");
 
   if (!currentUser) {
-    document.getElementById("authSection").classList.remove("hidden");
-    document.getElementById("userHeader").classList.add("hidden");
-    document.getElementById("customerSection").classList.add("hidden");
-    document.getElementById("ownerSection").classList.add("hidden");
-    document.getElementById("riderSection").classList.add("hidden");
+    authSection.classList.remove("hidden");
+    userHeader.classList.add("hidden");
+    customerSection.classList.add("hidden");
+    ownerSection.classList.add("hidden");
+    riderSection.classList.add("hidden");
     return;
   }
 
-  document.getElementById("authSection").classList.add("hidden");
-  document.getElementById("userHeader").classList.remove("hidden");
+  authSection.classList.add("hidden");
+  userHeader.classList.remove("hidden");
+
   document.getElementById("welcomeText").innerText = `Hello, ${currentUser.name}`;
 
   const badge = document.getElementById("userIdBadge");
   badge.innerText = `${currentUser.role} | ${currentUser.id}`;
   badge.className = "badge" + (currentUser.role === "DELIVERY_RIDER" ? " badge-rider" : "");
 
-  document.getElementById("customerSection").classList.add("hidden");
-  document.getElementById("ownerSection").classList.add("hidden");
-  document.getElementById("riderSection").classList.add("hidden");
+  customerSection.classList.add("hidden");
+  ownerSection.classList.add("hidden");
+  riderSection.classList.add("hidden");
 
   if (currentUser.role === "CUSTOMER") {
-    document.getElementById("customerSection").classList.remove("hidden");
+    customerSection.classList.remove("hidden");
+    restoreCustomerState();
   } else if (currentUser.role === "RESTAURANT_OWNER") {
-    document.getElementById("ownerSection").classList.remove("hidden");
+    ownerSection.classList.remove("hidden");
+    restoreOwnerState();
   } else if (currentUser.role === "DELIVERY_RIDER") {
-    document.getElementById("riderSection").classList.remove("hidden");
+    riderSection.classList.remove("hidden");
     loadPendingTasks();
     loadActiveDeliveries();
   }
 }
 
-// Render all sections on page load
+// ------------------------------------------------------------
+// State restoration helpers
+// ------------------------------------------------------------
+function restoreCustomerState() {
+  const savedRestaurantId = loadSelectedRestaurantId();
+  const savedMenuItemId   = loadSelectedMenuItemId();
+  const savedOrderId      = loadLastOrderId();
+
+  const restaurantInput = document.getElementById("restaurantId");
+  const menuItemInput   = document.getElementById("menuItemId");
+  const orderIdInput    = document.getElementById("orderIdActions");
+
+  if (restaurantInput && savedRestaurantId) {
+    restaurantInput.value = savedRestaurantId;
+  }
+
+  if (menuItemInput && savedMenuItemId) {
+    menuItemInput.value = savedMenuItemId;
+  }
+
+  if (orderIdInput && savedOrderId) {
+    orderIdInput.value = savedOrderId;
+  }
+}
+
+function restoreOwnerState() {
+  const savedRestaurantId = loadSelectedRestaurantId();
+
+  const ownerRestaurantInput = document.getElementById("ownerRestaurantId");
+  const menuRestaurantInput  = document.getElementById("menuRestId");
+
+  if (ownerRestaurantInput && savedRestaurantId) {
+    ownerRestaurantInput.value = savedRestaurantId;
+  }
+
+  if (menuRestaurantInput && savedRestaurantId) {
+    menuRestaurantInput.value = savedRestaurantId;
+  }
+}
+
+// ------------------------------------------------------------
+// App bootstrap
+// ------------------------------------------------------------
 window.addEventListener("DOMContentLoaded", () => {
-  renderAuthSection();          // Module 1
-  renderCustomerSection();      // Module 2
-  renderOrderSection();         // Module 3
-  renderOwnerRestaurantSection(); // Module 4
-  renderOwnerMenuSection();     // Module 5
-  renderOwnerOrdersSection();   // Module 6
-  renderRiderSection();         // Module 7
+  renderAuthSection();
+  renderCustomerSection();
+  renderOrderSection();
+  renderOwnerRestaurantSection();
+  renderOwnerMenuSection();
+  renderOwnerOrdersSection();
+  renderRiderSection();
+
+  loadCurrentUser();
+  setUIForUser();
 });

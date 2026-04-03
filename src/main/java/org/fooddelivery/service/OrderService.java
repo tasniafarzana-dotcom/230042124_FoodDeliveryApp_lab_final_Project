@@ -31,10 +31,10 @@ public class OrderService implements IOrderService {
 
         if (!item.isAvailable())
             throw new IllegalArgumentException("Item is not available");
-        if (item.getQuantity() < quantity)
-            throw new IllegalArgumentException("Not enough stock");
         if (quantity <= 0)
             throw new IllegalArgumentException("Quantity must be positive");
+        if (item.getQuantity() < quantity)
+            throw new IllegalArgumentException("Not enough stock");
 
         OrderItem orderItem = new OrderItem(item, quantity);
         double total = orderItem.getTotalPrice();
@@ -43,8 +43,8 @@ public class OrderService implements IOrderService {
         Order order = new Order(id, userId, restaurantId, List.of(orderItem), total, deliveryAddressId);
         orderRepository.save(order);
 
-        // Stock কমানো
         item.setQuantity(item.getQuantity() - quantity);
+        item.setAvailable(item.getQuantity() > 0);
         menuRepository.update(item);
 
         return order;

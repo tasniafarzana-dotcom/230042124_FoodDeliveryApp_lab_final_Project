@@ -25,7 +25,6 @@ public class CustomerOrderService {
             @WebParam(name = "restaurantId") String restaurantId,
             @WebParam(name = "menuItemId") String menuItemId,
             @WebParam(name = "quantity") int quantity,
-            @WebParam(name = "couponCode") String couponCode,
             @WebParam(name = "deliveryAddressId") String deliveryAddressId) {
 
         String addressId = (deliveryAddressId == null || deliveryAddressId.isBlank())

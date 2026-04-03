@@ -17,10 +17,22 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment processPayment(String orderId, String method, double amount) {
-        if (amount <= 0)
+        if (orderId == null || orderId.isBlank()) {
+            throw new IllegalArgumentException("Order ID is required");
+        }
+
+        if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive");
-        if (!method.equals("CASH") && !method.equals("CARD") && !method.equals("MOBILE_BANKING"))
+        }
+
+        if (!"CASH".equals(method) && !"CARD".equals(method) && !"MOBILE_BANKING".equals(method)) {
             throw new IllegalArgumentException("Invalid payment method");
+        }
+
+        // Duplicate payment prevention
+        if (paymentRepository.findByOrderId(orderId).isPresent()) {
+            throw new IllegalArgumentException("Payment already exists for order: " + orderId);
+        }
 
         String id = IdGenerator.generatePaymentId();
         Payment payment = new Payment(id, orderId, method, amount);

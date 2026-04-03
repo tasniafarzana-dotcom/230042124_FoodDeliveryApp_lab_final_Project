@@ -1,5 +1,9 @@
 package org.fooddelivery.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Payment {
     private String id;
     private String orderId;
@@ -8,6 +12,8 @@ public class Payment {
     private String status;
     private String transactionId;
     private String paidAt;
+
+    public Payment() {}
 
     public Payment(String id, String orderId, String method, double amount) {
         this.id = id;
@@ -27,6 +33,10 @@ public class Payment {
     public String getTransactionId() { return transactionId; }
     public String getPaidAt() { return paidAt; }
 
+    public void setId(String id) { this.id = id; }
+    public void setOrderId(String orderId) { this.orderId = orderId; }
+    public void setMethod(String method) { this.method = method; }
+    public void setAmount(double amount) { this.amount = amount; }
     public void setStatus(String status) { this.status = status; }
     public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
     public void setPaidAt(String paidAt) { this.paidAt = paidAt; }

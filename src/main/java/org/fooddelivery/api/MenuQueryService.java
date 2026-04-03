@@ -10,7 +10,7 @@ import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 
-@WebService
+@WebService(targetNamespace = "http://api.fooddelivery.org/")
 public class MenuQueryService {
 
     private final IMenuService menuService;
@@ -32,14 +32,14 @@ public class MenuQueryService {
         return menuService.getItemsByCategory(restaurantId, category);
     }
 
-    
     @WebMethod
     public MenuItem addMenuItem(
             @WebParam(name = "restaurantId") String restaurantId,
             @WebParam(name = "n") String name,
             @WebParam(name = "description") String description,
             @WebParam(name = "price") double price,
-            @WebParam(name = "category") String category) {
-        return menuService.addMenuItem(restaurantId, name, description, price, category);
+            @WebParam(name = "category") String category,
+            @WebParam(name = "quantity") int quantity) {
+        return menuService.addMenuItem(restaurantId, name, description, price, category, quantity);
     }
 }

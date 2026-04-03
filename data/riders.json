@@ -3,6 +3,14 @@
     "id": "USR-8221D6B8",
     "name": "Akash Rahman",
     "phone": "01712051799",
+    "isAvailable": false,
+    "currentLat": 0.0,
+    "currentLng": 0.0
+  },
+  {
+    "id": "USR-025F71DB",
+    "name": "Abir Hasan",
+    "phone": "01408482358",
     "isAvailable": true,
     "currentLat": 0.0,
     "currentLng": 0.0

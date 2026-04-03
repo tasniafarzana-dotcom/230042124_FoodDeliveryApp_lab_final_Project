@@ -1,9 +1,10 @@
 package org.fooddelivery.repository;
 
-import com.google.gson.reflect.TypeToken;
+import java.util.List;
+
 import org.fooddelivery.model.Restaurant;
 
-import java.util.List;
+import com.google.gson.reflect.TypeToken;
 
 public class RestaurantRepository extends FileRepository<Restaurant> implements IRestaurantRepository {
 
@@ -40,7 +41,6 @@ public class RestaurantRepository extends FileRepository<Restaurant> implements 
     @Override
     public List<Restaurant> findOpenRestaurants() {
         return findAll().stream()
-                .filter(Restaurant::isOpen)
                 .toList();
     }
 }
